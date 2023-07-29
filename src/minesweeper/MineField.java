@@ -29,7 +29,7 @@ public class MineField extends Board {
 			}
 		}
 		
-		// increase count of neighbouring mines
+		// increase count of neighbouring spaces
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				if (this.board[i][j] >= 100) {
@@ -103,17 +103,23 @@ public class MineField extends Board {
 				}
 			}
 		}
+		for (int i = 0; i< 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				if (this.board[i][j] == 0) {
+					this.board[i][j] = 10;
+				}
+			}
+		}
 		
 		
-		for(int[] row : this.board) {
-			System.out.println();
-			for (int i : row) {
-	            System.out.print(i);
-	            System.out.print("\t");
-	        }
-	        System.out.println();
-        }
 	}
+	
+	public int checkMove(int[] move) {
+		int row = move[0];
+		int col = move[1];
+		return this.board[row][col];
+	}
+	
 	public boolean isInList(final ArrayList<int[]> coords, final int[] randMines ) {
 		return coords.stream().anyMatch(x -> Arrays.equals(x, randMines));
 	}

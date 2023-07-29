@@ -4,42 +4,71 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Minesweeper {
-	int[][] gameBoard = new int[10][10];
-	int[][] legendBoard = new int[10][10];
-	boolean hasWon = false;
-	boolean hasLost = false;
+	
+	boolean endGame = false;
 	int[] move;
 	
-	// next steps: 
-	// create Board interface to make gameBoard and legendBoard
-	// create populateLegend method to add bombs to legendBoard, and to add numbers
-	// when player inputs a move, check legendBoard and if their move locates a bomb, 
-	// game over, display new board with bombs and numbers
-	// if they locate a number, display their current board with the number in place of #
-	// if they locate an empty spot display their current board with a 0 in the spot they chose
+	// 0 = no mines in 3x3 grid
+	// 10 = no mines in 3x3 grid and has been checked by player
+	// n < 9 = there is n mines in 3x3 grid 
+	// >100 = mine
 	
 	
 	public void start() {
 		System.out.println("\n           Welcome to Minesweeper");
-		line();
 		setupGame();
-		System.out.println();
-		line();
 		MineField mineField = new MineField();
-//		while(hasLost == false && hasWon == false) { 
-		move = playerMove();
-		System.out.println(Arrays.toString(move));
-		mineField.setup(); 
-			
-//		}
+		mineField.setup();
+		VisibleField visibleField = new VisibleField();
+		visibleField.addMines(mineField);
+		Scanner s = new Scanner(System.in);
+		while(!endGame) { 
+//			printLegend(mineField);
+			move = playerMove(s);
+			int revealedSpace = mineField.checkMove(move);
+			if (revealedSpace >= 100) {
+				System.out.println();
+				System.out.println("\n        OH NO! You blew yourself up!");
+				visibleField.printGameOver(mineField);
+				System.out.println("\n                 Game Over!");
+				gameOver();
+			} else {
+				if (revealedSpace == 10) {
+					visibleField.board[move[0]][move[1]] = 10;
+					if (Arrays.deepEquals(mineField.board, visibleField.board)) {
+						System.out.println("\n       You revealed all empty squares");
+						visibleField.printGameOver(mineField);
+						System.out.println("                  You Win!");
+						gameOver();
+					} else {
+						System.out.println("\n\n\t\s\s\sNo mines around here!");
+						visibleField.printField();
+					}
+				} else {
+					visibleField.board[move[0]][move[1]] = revealedSpace;
+					if (Arrays.deepEquals(mineField.board, visibleField.board)) {
+						System.out.println("\n       You revealed all empty squares");
+						visibleField.printGameOver(mineField);
+						System.out.println("                  You Win!");
+						gameOver();
+					} else {
+						System.out.println("\n\n\t\s\s\sPhew! That was close!");
+						visibleField.printField();
+					}
+				}
+				
+				}
+			}	
+			s.close();
+		}
 		 
-	}
 	
 	
 	
 	
 	public void setupGame() {
-
+		
+		line();
 		for (int k = 0; k < 10; k++) {
 			if(k == 0) {
 				// top number row
@@ -63,17 +92,59 @@ public class Minesweeper {
 				}
 			}
 		}
+		line();
+	}
+	
+	public void printLegend(MineField mineField) { 
+		Minesweeper.line();
+		for (int k = 0; k < 10; k++) {
+			if(k == 0) {
+				// top number row
+				System.out.print("     " + k + "   ");
+			}else if (k < 9) {
+			System.out.print(k + "   ");
+			} else if (k == 9) {
+				System.out.print(k + "\n\n");
+			}
+		}
+		for (int i = 0; i < 10; i++) {
+			if (i < 10) {
+				// left number row
+				System.out.print(i + "  ");
+			}
+			for (int j = 0; j < 10; j++) {
+				if (j < 9) {
+					if (mineField.board[i][j] < 10) {
+						System.out.printf("| %s ", mineField.board[i][j]);
+					} else if (mineField.board[i][j] == 10) {
+						System.out.print("|   ");
+					} else if (mineField.board[i][j] >= 100) {
+						System.out.print("| * ");
+					}
+				} else if (j == 9) {
+					if (mineField.board[i][j] < 10) {
+						System.out.printf("| %s |\n\n", mineField.board[i][j]);
+					} else if (mineField.board[i][j] == 10) {
+						System.out.print("|   |\n\n");
+					} else if (mineField.board[i][j] >= 100) {
+						System.out.print("| * |\n\n");
+					}
+					
+				}
+			}
+		}
+		Minesweeper.line();
 	}
 	
 	
 	
 	
-	public int[] playerMove() {
+	public int[] playerMove(Scanner s) {
 		boolean validMove = false;
 		int row = 0;
 		int col = 0;
 		System.out.println("Time to tempt fate!");
-		Scanner s = new Scanner(System.in);
+		System.out.println();
 		while(!validMove) {
 			System.out.print("\nSelect a row number if you dare: ");
 			while(!s.hasNextInt()) {
@@ -94,21 +165,16 @@ public class Minesweeper {
 				validMove = true;
 			}
 		}
-			int[] move = {row, col};
-			return move;
+		int[] move = {row, col};
+		return move;
+	}
+	
+	public void gameOver() {
+		endGame = true;
 	}
 	
 	
-	public void newLegendBoard(int[] move) {
-		int row = move[0];
-		int col = move[1];
-		System.out.println("row: " + row + ", col: " + col);
-	}
-	
-	
-	
-	
-	public void line() {
+	public static void line() {
 		for (int i = 0; i < 45; i++) {
 			if (i < 44 ) {
 				if (i % 2 == 0) {
