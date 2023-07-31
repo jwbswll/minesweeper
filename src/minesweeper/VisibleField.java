@@ -1,7 +1,9 @@
 package minesweeper;
-import java.util.Arrays;
 
 public class VisibleField extends Board {
+	public void setSize(int size) {
+		this.size=size;
+	}
 	
 	public void printField() {
 		Minesweeper.line();
@@ -14,7 +16,7 @@ public class VisibleField extends Board {
 			} else if (k == 9) {
 				System.out.print(k + "\n\n");
 			}
-		}hello
+		}
 		for (int i = 0; i < 10; i++) {
 			if (i < 10) {
 				// left number row

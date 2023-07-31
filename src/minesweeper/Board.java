@@ -1,5 +1,11 @@
 package minesweeper;
 
 abstract class Board {
-	int[][] board = new int[10][10];
+	
+	int size;
+	int[][] board =  new int[size][size];
+	
+	public void setSize(int size) {
+		this.size = size;
+	}
 }
