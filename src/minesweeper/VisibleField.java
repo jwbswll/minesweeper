@@ -14,7 +14,7 @@ public class VisibleField extends Board {
 			} else if (k == 9) {
 				System.out.print(k + "\n\n");
 			}
-		}
+		}hello
 		for (int i = 0; i < 10; i++) {
 			if (i < 10) {
 				// left number row
