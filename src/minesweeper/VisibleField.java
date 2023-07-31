@@ -1,5 +1,4 @@
 package minesweeper;
-import java.util.Arrays;
 
 public class VisibleField extends Board {
 	

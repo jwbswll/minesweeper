@@ -1,5 +1,4 @@
 package minesweeper;
-
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -7,6 +6,7 @@ public class Minesweeper {
 	
 	boolean endGame = false;
 	int[] move;
+	int numMines = 10;
 	
 	// 0 = no mines in 3x3 grid
 	// 10 = no mines in 3x3 grid and has been checked by player
@@ -16,15 +16,18 @@ public class Minesweeper {
 	
 	public void start() {
 		System.out.println("\n           Welcome to Minesweeper");
+		line();
+		System.out.println();
+		Scanner x = new Scanner(System.in);
+		numMines = setDifficulty(x);
 		setupGame();
 		MineField mineField = new MineField();
-		mineField.setup();
+		mineField.setup(numMines);
 		VisibleField visibleField = new VisibleField();
 		visibleField.addMines(mineField);
-		Scanner s = new Scanner(System.in);
 		while(!endGame) { 
 			printLegend(mineField);
-			move = playerMove(s);
+			move = playerMove(x);
 			int revealedSpace = mineField.checkMove(move);
 			if (revealedSpace >= 100) {
 				System.out.println();
@@ -61,11 +64,44 @@ public class Minesweeper {
 				
 				}
 			}	
-			s.close();
+			x.close();
 		}
 		 
 	
-	
+	public int setDifficulty(Scanner s) {
+		int diff;
+		int numMines = 10;
+		boolean valid = false;
+		while(!valid) {
+			System.out.println("                  DIFFICULTY\n");
+			System.out.println("                --------------");
+			System.out.println("                | Easy   [1] |\n                | Medium [2] |\n                | Hard   [3] |");
+			System.out.println("                --------------\n");
+			System.out.print("Select a difficulty level: ");
+			
+			while(!s.hasNextInt()) {
+				System.out.println("Invalid input, please try again\n");
+				s.next();
+			}
+			diff = s.nextInt();
+			if (diff == 1) {
+				System.out.println("\nDifficulty: Easy\n\n");
+				numMines = 10;
+				valid = true;
+			} else if (diff == 2) {
+				System.out.println("\nDifficulty: Medium\n\n");
+				numMines = 20;
+				valid = true;
+			} else if (diff == 3) {
+				System.out.println("\nDifficulty: Hard\n\n");
+				numMines = 30;
+				valid = true;
+			} else {
+				System.out.println("Invalid input, please try again\n");
+			}
+		}
+		return numMines;
+	}
 	
 	
 	public void setupGame() {

@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MineField extends Board {
-	public void setup() {
+	public void setup(int numMines) {
 		Randomiser rand = new Randomiser();
 		ArrayList<int[]> mineCoords = new ArrayList<int[]>();
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < numMines; i++) {
 				int[] randomMines = rand.getRandomCoords();
 				Boolean isUnique = false;
 				while(!isUnique) {
