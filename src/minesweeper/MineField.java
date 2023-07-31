@@ -99,6 +99,34 @@ public class MineField extends Board {
 						this.board[i+1][j-1]++;
 						// bottom middle
 						this.board[i+1][j]++;
+					} else if (i == 0 && j == 0) {
+						// middle right
+						this.board[i][j+1]++;
+						// bottom right
+						this.board[i+1][j+1]++;
+						// bottom middle
+						this.board[i+1][j]++;
+					} else if (i == 9 && j == 0) {
+						// top middle
+						this.board[i-1][j]++;
+						// top right
+						this.board[i-1][j+1]++;
+						// middle right
+						this.board[i][j+1]++;
+					} else if (i == 9 && j == 9) {
+						// top middle
+						this.board[i-1][j]++;
+						//top left
+						this.board[i-1][j-1]++;
+						// middle left
+						this.board[i][j-1]++;
+					} else if (i == 0 && j == 9) {
+						// middle left
+						this.board[i][j-1]++;
+						// bottom left
+						this.board[i+1][j-1]++;
+						// bottom middle
+						this.board[i+1][j]++;
 					}
 				}
 			}

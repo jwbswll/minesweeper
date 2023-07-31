@@ -23,7 +23,7 @@ public class Minesweeper {
 		visibleField.addMines(mineField);
 		Scanner s = new Scanner(System.in);
 		while(!endGame) { 
-//			printLegend(mineField);
+			printLegend(mineField);
 			move = playerMove(s);
 			int revealedSpace = mineField.checkMove(move);
 			if (revealedSpace >= 100) {
@@ -42,6 +42,8 @@ public class Minesweeper {
 						gameOver();
 					} else {
 						System.out.println("\n\n\t\s\s\sNo mines around here!");
+						int count = 0;
+//						visibleField.revealAdjacentEmptySquares(move, count, mineField);
 						visibleField.printField();
 					}
 				} else {
