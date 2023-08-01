@@ -45,7 +45,7 @@ public class Minesweeper {
 						gameOver();
 					} else {
 						System.out.println("\n\n\t\s\s\sNo mines around here!");
-//						visibleField.revealAdjacentEmptySquares(move, 0, mineField);
+						visibleField.revealAdjacentEmptySquares(move, 0, mineField);
 						visibleField.printField();
 					}
 				} else {
