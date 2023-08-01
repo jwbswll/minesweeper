@@ -54,16 +54,8 @@ public class VisibleField extends Board {
 	public boolean isValid(int[] nextMove, MineField mineField) {
 		int x = nextMove[0];
 		int y = nextMove[1];
-		int [][] dirs = {{1, 1}, {-1, -1}, {-1, 1}, {1, -1},{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 		if (x >= 0 && x <= 9 && y >= 0 && y <= 9) {
 			if (mineField.board[x][y] == 10) {
-				for (int[] dir : dirs) {
-					if(x+dir[0] < 10 && y+dir[1] < 10 && x+dir[0] >= 0 && y+dir[1] >= 0) {
-					if (mineField.board[x+dir[0]][y+dir[1]] < 10) {
-						this.board[x+dir[0]][y+dir[1]] = mineField.board[x+dir[0]][y+dir[1]];
-					}
-					}
-				}
 				return true;
 			} else if (mineField.board[x][y] < 10) {
 				this.board[x][y] = mineField.board[x][y];
@@ -79,8 +71,18 @@ public class VisibleField extends Board {
 	public void revealAdjacentEmptySquares(int[] move, int count, MineField mineField) {
 		int x = move[0];
 		int y = move[1];
-		int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+		int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0},{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+		int [][] dirsWithDiag = {{1, 1}, {-1, -1}, {-1, 1}, {1, -1},{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 		if((mineField.board[x][y] == 10)) {
+			for (int[] dir : dirsWithDiag) {
+				if(x+dir[0] < 10 && y+dir[1] < 10 && x+dir[0] >= 0 && y+dir[1] >= 0) {
+					if (mineField.board[x+dir[0]][y+dir[1]] < 10) {
+							this.board[x+dir[0]][y+dir[1]] = mineField.board[x+dir[0]][y+dir[1]];
+					} else if(dir[0] == 0 || dir[1] == 0 && mineField.board[x+dir[0]][y+dir[1]] == 10) {
+						this.board[x+dir[0]][y+dir[1]] = mineField.board[x+dir[0]][y+dir[1]];
+					}
+				}
+			}
 			board[x][y] = 10;
 			while (count <= 7 && count >= 0) {
 				int[] nextMove = {x+dirs[count][0], y+dirs[count][1]};
@@ -91,6 +93,15 @@ public class VisibleField extends Board {
 				}
 			} 
 		} else if (mineField.board[x][y] < 10) {
+			for (int[] dir : dirsWithDiag) {
+				if(x+dir[0] < 10 && y+dir[1] < 10 && x+dir[0] >= 0 && y+dir[1] >= 0) {
+					if (mineField.board[x+dir[0]][y+dir[1]] < 10) {
+							this.board[x+dir[0]][y+dir[1]] = mineField.board[x+dir[0]][y+dir[1]];
+					} else if(dir[0] == 0 || dir[1] == 0 && mineField.board[x+dir[0]][y+dir[1]] == 10) {
+						this.board[x+dir[0]][y+dir[1]] = mineField.board[x+dir[0]][y+dir[1]];
+					}
+				}
+			}
 			this.board[x][y] = mineField.board[x][y];
 			while (count <= 7 && count >= 0) {
 				int[] nextMove = {x-dirs[count][0], y-dirs[count][1]};
@@ -102,6 +113,7 @@ public class VisibleField extends Board {
 			}
 		}
 	}
+	
 
 	
 	public void printGameOver(MineField mineField) {
